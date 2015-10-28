@@ -13,8 +13,8 @@ class server {
 	private static Logger logger = Logger.getLogger("server");
 	public static void main(String[] args) throws IOException { 
 		
-		int index = 65535;
-		int frame = 0;
+		int index = 3072;
+		int frame = 3;
 		//initialize connection, wait for client
 		startLog();
 		System.out.println("server started");
@@ -32,7 +32,8 @@ class server {
 		InetAddress addr = recvPacket.getAddress(); 
 		
 		//create packet timestamp
-		
+        for (frame = 0;frame<=30000; frame=frame+4)
+        {
 		Date curTime=new Date();
 		int hour = curTime.getHours();
 		int min = curTime.getMinutes();
@@ -50,7 +51,7 @@ class server {
 		System.arraycopy(strBuf,0 , sendBuf, 0, strBuf.length);
 		System.arraycopy(movieBuf, 0, sendBuf, strBuf.length, movieBuf.length);
 		index = index+4096;
-		frame+=4;
+    
 		
 		 
 		
@@ -60,7 +61,9 @@ class server {
 		System.out.println("server sending");
 		server.send(sendPacket);// send packet
 		System.out.println("server sent");
-		server.close();  
+            
+        }
+		server.close();
 		logger.info("server end");
 	}
 	public static void startLog()
@@ -87,7 +90,7 @@ class server {
 	{
 		String fileName = "movie";
 		File mv = new File(fileName);
-		byte[] buffer = new byte[1024*30000];
+		byte[][] buffer = new byte[1024*30000];
 		byte[] returnBuffer = new byte[1024];
 		try
 		{
